@@ -28,10 +28,11 @@ os.makedirs("outputs", exist_ok=True)
 output_path = f"outputs/relaxing_music_{now}.wav"
 
 # ذخیره‌سازی خروجی
-import soundfile as sf
 import os
-os.makedirs("outputs", exist_ok=True)
-sf.write(output_path, audio_values[0].cpu().numpy(), samplerate=32000)
+import soundfile as sf
 
+os.makedirs("outputs", exist_ok=True)  # 🔧 مطمئن شو پوشه هست
+
+sf.write(output_path, audio_values[0].cpu().numpy(), samplerate=32000)
 
 print(f"✅ Music generated and saved at: {output_path}")
