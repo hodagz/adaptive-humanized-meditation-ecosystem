@@ -29,7 +29,8 @@ output_path = f"outputs/relaxing_music_{now}.wav"
 
 # ذخیره‌سازی خروجی
 import soundfile as sf
-
+import os
+os.makedirs("outputs", exist_ok=True)
 sf.write(output_path, audio_values[0].cpu().numpy(), samplerate=32000)
 
 
