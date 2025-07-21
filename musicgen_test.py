@@ -31,8 +31,12 @@ output_path = f"outputs/relaxing_music_{now}.wav"
 import os
 import soundfile as sf
 
-os.makedirs("outputs", exist_ok=True)  # 🔧 مطمئن شو پوشه هست
+# ساخت پوشه خروجی
+os.makedirs("outputs", exist_ok=True)
 
-sf.write(output_path, audio_values[0].cpu().numpy(), samplerate=32000)
+# نرمال‌سازی و تبدیل داده صوتی
+audio = audio_values[0].cpu().numpy().astype('float32')
+audio = audio / max(abs(audio))  # بسیار مهم
 
-print(f"✅ Music generated and saved at: {output_path}")
+# ذخیره فایل
+sf.write(output_path, audio, samplerate=32000)
