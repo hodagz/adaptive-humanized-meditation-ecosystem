@@ -28,6 +28,9 @@ os.makedirs("outputs", exist_ok=True)
 output_path = f"outputs/relaxing_music_{now}.wav"
 
 # ذخیره‌سازی خروجی
-scipy.io.wavfile.write(output_path, rate=model.config.audio_encoder.sampling_rate, data=audio_values[0].cpu().numpy())
+import soundfile as sf
+
+sf.write(output_path, audio_values[0].cpu().numpy(), samplerate=32000)
+
 
 print(f"✅ Music generated and saved at: {output_path}")
