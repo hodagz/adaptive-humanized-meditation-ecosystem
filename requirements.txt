@@ -1,7 +1,7 @@
 openai
 together
 edge-tts
-coqui-ai
+TTS
 torch
 transformers
 pydub
