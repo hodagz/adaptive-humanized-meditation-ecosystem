@@ -1,11 +1,13 @@
 # musicgen_test.py
+
 import torch
 from transformers import MusicgenForConditionalGeneration, AutoProcessor
-import scipy
 from datetime import datetime
 import os
+import numpy as np
+from scipy.io.wavfile import write as write_wav
 
-# تنظیمات اولیه
+# تنظیمات
 model_id = "facebook/musicgen-small"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -13,30 +15,24 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 processor = AutoProcessor.from_pretrained(model_id)
 model = MusicgenForConditionalGeneration.from_pretrained(model_id).to(device)
 
-# متن راهنما برای تولید موسیقی
+# متن راهنمای تولید موسیقی
 prompt = "A relaxing, soothing ambient melody with soft pads and calm rhythm, instrumental only."
-
-# آماده‌سازی ورودی
 inputs = processor(text=[prompt], return_tensors="pt").to(device)
 
 # تولید موسیقی
-audio_values = model.generate(**inputs, max_new_tokens=256)
+audio_values = model.generate(**inputs, max_new_tokens=1024)
 
-# ذخیره فایل خروجی با تاریخ و ساعت
-now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-os.makedirs("outputs", exist_ok=True)
-output_path = f"outputs/relaxing_music_{now}.wav"
-
-# ذخیره‌سازی خروجی
-import os
-import soundfile as sf
+# آماده‌سازی برای ذخیره‌سازی
+audio = audio_values[0].cpu().numpy()
+audio = audio / np.max(np.abs(audio))  # نرمال‌سازی بین -1 و 1
+audio = (audio * 32767).astype(np.int16)  # تبدیل به int16
 
 # ساخت پوشه خروجی
 os.makedirs("outputs", exist_ok=True)
 
-# نرمال‌سازی و تبدیل داده صوتی
-audio = audio_values[0].cpu().numpy().astype('float32')
-audio = audio / max(abs(audio))  # بسیار مهم
+# ذخیره فایل WAV
+now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+output_path = f"outputs/relaxing_music_{now}.wav"
+write_wav(output_path, 32000, audio)
 
-# ذخیره فایل
-sf.write(output_path, audio, samplerate=32000)
+print(f"✅ فایل موسیقی با موفقیت ساخته شد: {output_path}")
