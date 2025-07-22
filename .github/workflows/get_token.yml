@@ -1,0 +1,25 @@
+name: Get YouTube Refresh Token
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get_token:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install google-auth google-auth-oauthlib
+
+      - name: Run script to get refresh token
+        run: |
+          python get_refresh_token.py
