@@ -1,17 +1,19 @@
-# get_refresh_token.py
-
-from google_auth_oauthlib.flow import InstalledAppFlow
 import json
+from google_auth_oauthlib.flow import InstalledAppFlow
 
-# Load client secret
+# بارگذاری client_secret
 with open("secrets/client_secret.json", "r") as f:
     client_config = json.load(f)
 
+# ایجاد جریان احراز هویت
 flow = InstalledAppFlow.from_client_config(
     client_config,
     scopes=["https://www.googleapis.com/auth/youtube.upload"]
 )
 
-creds = flow.run_local_server(port=0)
+# اجرای جریان تأییدیه به صورت کنسولی
+creds = flow.run_console()
+
+# نمایش refresh_token برای ذخیره در secrets
 print("\n✅ Your refresh token:")
 print(creds.refresh_token)
