@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  get_token:
+  auth:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -18,8 +18,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install google-auth google-auth-oauthlib
+          python -m pip install --upgrade pip
+          pip install google-auth-oauthlib
 
-      - name: Run script to get refresh token
+      - name: Run auth flow
         run: |
           python get_refresh_token.py
